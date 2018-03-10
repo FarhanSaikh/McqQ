@@ -1,5 +1,6 @@
 package com.a2zdaddy.myquizapp;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,15 +17,15 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
 
-    DatabaseReference mQusetionRef,mCoice1Ref,mCoice2Ref,mCoice3Ref,mCoice4Ref,mAnsRef;
-    private TextView mScoreView;
+    DatabaseReference mQusetionRef,mStatousref;
+    private TextView mScoreView,questioncountno;
     private TextView mQuestionView;
     private Button mButtonChoice1;
     private Button mButtonChoice2;
     private Button mButtonChoice3;
-    private Button mButtonChoice4;
+    private Button mButtonChoice4,quit;
 
-
+    private String qno;
     private String mAnswer;
     private int mScore = 0;
      public int mQuestionNumber = 0;
@@ -33,14 +34,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+           quit=findViewById(R.id.quit);
+           questioncountno=findViewById(R.id.qustioncount);
         mScoreView = (TextView)findViewById(R.id.score);
         mQuestionView = (TextView)findViewById(R.id.question);
         mButtonChoice1 = (Button)findViewById(R.id.choice1);
         mButtonChoice2 = (Button)findViewById(R.id.choice2);
         mButtonChoice3 = (Button)findViewById(R.id.choice3);
          mButtonChoice4=findViewById(R.id.choice4);
-        updateQuestion();
+         updateQuestion();
+
+         quit.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 Intent intent=new Intent(MainActivity.this,Main2Activity.class);
+                 intent.putExtra("score",Integer.toString(mScore));
+                 intent.putExtra("outof",qno);
+
+                 startActivity(intent);
+                 finish();
+
+
+
+             }
+         });
 
         //Start of Button Listener for Button1
         mButtonChoice1.setOnClickListener(new View.OnClickListener(){
@@ -51,12 +68,15 @@ public class MainActivity extends AppCompatActivity {
                 if (mButtonChoice1.getText().equals(mAnswer)){
                     mScore = mScore + 1;
                     updateScore(mScore);
-                    updateQuestion();
                     //This line of code is optiona
-                    Toast.makeText(MainActivity.this, "correct", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Correct", Toast.LENGTH_SHORT).show();
+                    updateQuestion();
+                }
 
-                }else {
-                    Toast.makeText(MainActivity.this, "wrong", Toast.LENGTH_SHORT).show();
+
+
+                else {
+                    Toast.makeText(MainActivity.this, "Wrong, Ans is: "+mAnswer, Toast.LENGTH_SHORT).show();
                     updateQuestion();
                 }
             }
@@ -70,15 +90,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view){
                 //My logic for Button goes in here
 
-                if (mButtonChoice2.getText().equals(mAnswer)){
+                if (mButtonChoice2.getText().equals(mAnswer)) {
                     mScore = mScore + 1;
                     updateScore(mScore);
-                    updateQuestion();
                     //This line of code is optiona
-                    Toast.makeText(MainActivity.this, "correct", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Correct", Toast.LENGTH_SHORT).show();
 
-                }else {
-                    Toast.makeText(MainActivity.this, "wrong", Toast.LENGTH_SHORT).show();
+                    updateQuestion();
+
+
+                }
+
+            else {
+                    Toast.makeText(MainActivity.this, "Wrong, Ans is: "+mAnswer, Toast.LENGTH_SHORT).show();
                     updateQuestion();
                 }
             }
@@ -96,12 +120,13 @@ public class MainActivity extends AppCompatActivity {
                 if (mButtonChoice3.getText().equals(mAnswer)){
                     mScore = mScore + 1;
                     updateScore(mScore);
-                    updateQuestion();
                     //This line of code is optiona
-                    Toast.makeText(MainActivity.this, "correct", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Correct", Toast.LENGTH_SHORT).show();
+                    updateQuestion();
+
 
                 }else {
-                    Toast.makeText(MainActivity.this, "wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Wrong, Ans is: "+mAnswer, Toast.LENGTH_SHORT).show();
                     updateQuestion();
                 }
             }
@@ -119,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
                     updateScore(mScore);
                     updateQuestion();
                     //This line of code is optiona
-                    Toast.makeText(MainActivity.this, "correct", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this, "Correct", Toast.LENGTH_SHORT).show();
 
                 }else {
-                    Toast.makeText(MainActivity.this, "wrong", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Wrong, Ans is: "+mAnswer, Toast.LENGTH_SHORT).show();
                     updateQuestion();
                 }
             }
@@ -136,107 +161,70 @@ public class MainActivity extends AppCompatActivity {
         mQusetionRef=FirebaseDatabase.getInstance().getReference().child(String.valueOf(mQuestionNumber));
         Log.d( "updateQuestion: ","databaseref for question"+mQusetionRef);
 
-        mQusetionRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("onDataChange: ","datasnapsohot for question"+dataSnapshot);
+            mQusetionRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.d("onDataChange: ", "datasnapsohot for question" + dataSnapshot);
 
-                String question=dataSnapshot.child("question").getValue(String.class);
-                mQuestionView.setText(question);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-                Toast.makeText(MainActivity.this,"Something wrong",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        mCoice1Ref=FirebaseDatabase.getInstance().getReference().child(String.valueOf(mQuestionNumber)).child("choice1");
-        Log.d( "updateQuestion: ","databaseref for choice 1"+mCoice1Ref);
-
-        mCoice1Ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d("onDataChange: ","datasnapsohot for choice1"+dataSnapshot);
-
-                String choice=dataSnapshot.getValue(String.class);
-                mButtonChoice1.setText(choice);
+                    String question = dataSnapshot.child("question").getValue(String.class);
+                    mQuestionView.setText(question);
+                    String choice1 = dataSnapshot.child("choice1").getValue(String.class);
+                    mButtonChoice1.setText(choice1);
+                    String choice2 = dataSnapshot.child("choice2").getValue(String.class);
+                    mButtonChoice2.setText(choice2);
+                    String choice3 = dataSnapshot.child("choice3").getValue(String.class);
+                    mButtonChoice3.setText(choice3);
+                    String choice4 = dataSnapshot.child("choice4").getValue(String.class);
+                    mButtonChoice4.setText(choice4);
+                    mAnswer = dataSnapshot.child("answer").getValue(String.class);
 
 
-            }
+                }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,"Something wrong",Toast.LENGTH_SHORT).show();
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
+                    Toast.makeText(MainActivity.this, "Something wrong", Toast.LENGTH_SHORT).show();
 
-
-            }
-        });
-        mCoice2Ref=FirebaseDatabase.getInstance().getReference().child(String.valueOf(mQuestionNumber)).child("choice2");
-        mCoice2Ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String choice=dataSnapshot.getValue(String.class);
-                mButtonChoice2.setText(choice);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,"Something wrong",Toast.LENGTH_SHORT).show();
-
-            }
-        });
-        mCoice3Ref=FirebaseDatabase.getInstance().getReference().child(String.valueOf(mQuestionNumber)).child("choice3");
-        mCoice3Ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                String choice=dataSnapshot.getValue(String.class);
-                mButtonChoice3.setText(choice);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,"Something wrong",Toast.LENGTH_SHORT).show();
+                }
+            });
 
 
-            }
-        });
-        mCoice4Ref=FirebaseDatabase.getInstance().getReference().child(String.valueOf(mQuestionNumber)).child("choice4");
-        mCoice4Ref.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+        mStatousref=FirebaseDatabase.getInstance().getReference().child(String.valueOf(mQuestionNumber));
+             mStatousref.addValueEventListener(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(DataSnapshot dataSnapshot) {
+                     if(dataSnapshot.exists()){
+                         mQuestionNumber++;
 
-                String choice=dataSnapshot.getValue(String.class);
-                mButtonChoice4.setText(choice);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this,"Something wrong",Toast.LENGTH_SHORT).show();
+                          qno=Integer.toString(mQuestionNumber);
+                          questioncountno.setText(qno);
 
 
-            }
-        });
+                     }
+                     else {
+                         Intent intent=new Intent(MainActivity.this,Main2Activity.class);
+                         intent.putExtra("score",Integer.toString(mScore));
+                         intent.putExtra("outof",qno);
 
-        mAnsRef=FirebaseDatabase.getInstance().getReference().child(String.valueOf(mQuestionNumber)).child("answer");
-        mAnsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-             mAnswer=dataSnapshot.getValue(String.class);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        mQuestionNumber++;
+                         startActivity(intent);
+                         finish();
 
 
-    }
+
+                     }
+
+                 }
+
+                 @Override
+                 public void onCancelled(DatabaseError databaseError) {
+
+                 }
+             });
+
+
+        }
+
 
 
 

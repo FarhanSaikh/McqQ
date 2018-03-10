@@ -4,6 +4,7 @@
     android:id="@+id/activity_quiz"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ecc0ec"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -12,16 +13,19 @@
     tools:context="com.a2zdaddy.myquizapp.MainActivity">
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:padding="8dp"
+        android:background="@drawable/oval"
         android:layout_marginBottom="40dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Score:  "
+            android:text="   Score :  "
+            android:textColor="#fff"
             android:textSize="20sp"
+            android:textStyle="bold"
             android:id="@+id/score_text"/>
 
         <TextView
@@ -29,19 +33,38 @@
             android:layout_height="wrap_content"
             android:id="@+id/score"
             android:text="0"
+            android:textColor="#fff"
+            android:textStyle="bold"
+
+
             android:textSize="20sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="/"
+            android:textStyle="bold"
+
+            android:textColor="#fff"
+
             android:textSize="20sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/qustioncount"
             android:text="0"
+            android:textColor="#fff"
+            android:textStyle="bold"
+
             android:layout_alignLeft="@id/score"
             android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/text_view_countdown"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:text="00:00"
+            android:textColor="#e10505"
+            android:textSize="25sp" />
 
     </LinearLayout>
 
@@ -51,6 +74,9 @@
         android:text="Which thing is alive?"
         android:textSize="20sp"
         android:padding="8dp"
+        android:textStyle="bold"
+        android:background="@drawable/rectangle"
+        android:textColor="#fff"
         android:layout_marginBottom="40dp"
         android:id="@+id/question"/>
 
@@ -59,7 +85,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="bird"
-        android:background="#0091EA"
+        android:textStyle="bold"
+        android:drawableLeft="@drawable/ic_filter_1_black_24dp"
+
+        android:background="@drawable/oval"
         android:textColor="#fff"
         android:padding="8dp"
         android:layout_marginBottom="5dp"
@@ -69,9 +98,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="door"
-        android:background="#0091EA"
+        android:background="@drawable/oval"
         android:textColor="#fff"
         android:padding="8dp"
+        android:textStyle="bold"
+        android:drawableLeft="@drawable/ic_filter_2_black_24dp"
+
         android:layout_marginBottom="5dp"
         android:id="@+id/choice2"/>
 
@@ -79,26 +111,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="rock"
-        android:background="#0091EA"
+
+        android:drawableLeft="@drawable/ic_filter_3_black_24dp"
+        android:background="@drawable/oval"
         android:textColor="#fff"
         android:padding="8dp"
+        android:textStyle="bold"
+
         android:layout_marginBottom="5dp"
         android:id="@+id/choice3"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="rock"
-        android:background="#0091EA"
+        android:drawableLeft="@drawable/ic_filter_4_black_24dp"
+
+        android:background="@drawable/oval"
         android:textColor="#fff"
         android:padding="8dp"
+        android:textStyle="bold"
+
         android:layout_marginBottom="5dp"
         android:id="@+id/choice4"/>
 
     <Button
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textStyle="bold"
+android:drawableLeft="@drawable/ic_cancel_black_24dp"
+
         android:text="quit"
-        android:background="#e60fb7"
+        android:background="@drawable/rectangle"
         android:textColor="#fff"
         android:padding="8dp"
         android:layout_marginBottom="24dp"

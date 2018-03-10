@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 //My logic for Button goes in here
 
                 if (mButtonChoice1.getText().equals(mAnswer)){
+
                     mScore = mScore + 1;
                     updateScore(mScore);
                     //This line of code is optiona
